@@ -16,8 +16,17 @@ var bot = new builder.UniversalBot(connector);
 bot.localePath(path.join(__dirname, './locale'));
 
 bot.dialog('/', function (session) {
-    session.send('Blaah Blaah: ' + session.message.text);
+    session.beginDialog('greetings');  
 });
+
+bot.dialog('greetings', [
+    function (session) {
+        builder.Prompts.text(session, 'Hi! What is your name?');
+    },
+    function (session, results) {
+        session.endDialog('Hello %s!', results.response);
+    }
+]);
 
 if (useEmulator) {
     var restify = require('restify');
